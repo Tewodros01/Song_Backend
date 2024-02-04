@@ -19,5 +19,6 @@ song_router.get("/allAlbum", songController.getAllAlbumsWithSongsAndArtist);
 song_router.get("/:id", songController.getSongById);
 song_router.get("/", songController.getAllSongs);
 song_router.put("/:id", songController.updateSong);
+song_router.delete("/:id", songController.deleteSong);
 
 export default song_router;

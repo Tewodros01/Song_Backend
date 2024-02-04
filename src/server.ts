@@ -34,10 +34,11 @@ app.use("/api", indexRoutes);
 // Public
 app.use("/uploads", express.static(path.resolve("uploads")));
 
-app.all("*", (req, res) => {
+app.all("*", (req: express.Request, res: express.Response) => {
   res.status(404);
   if (req.accepts("html")) {
-    res.sendFile(path.join(__dirname, "views", "404.html"));
+    const filePath = path.join(__dirname, "..", "views", "404.html");
+    res.sendFile(filePath);
   } else if (req.accepts("json")) {
     res.json({ error: "404 Not Found" });
   } else {
