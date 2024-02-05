@@ -9,6 +9,7 @@ song_router.get(
   "/statistics/artist",
   songController.getNumberOfSongsAndAlbumsByArtist
 );
+
 song_router.get("/statistics", songController.getStatistics);
 
 song_router.get("/title/:title", songController.getSongsByTitle);
@@ -16,6 +17,10 @@ song_router.get("/artist/:artist", songController.getSongsByArtist);
 song_router.post("/", songController.createNewSong);
 song_router.get("/allArtist", songController.getAllArtistsWithAlbumsAndSongs);
 song_router.get("/allAlbum", songController.getAllAlbumsWithSongsAndArtist);
+song_router.get(
+  "/allGenre",
+  songController.getAllGenresWithArtistAlbumsAndSongs
+);
 song_router.get("/:id", songController.getSongById);
 song_router.get("/", songController.getAllSongs);
 song_router.put("/:id", songController.updateSong);

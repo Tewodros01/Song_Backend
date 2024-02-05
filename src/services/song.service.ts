@@ -204,6 +204,32 @@ const songService = {
       throw new Error(`${error}`);
     }
   },
+
+  getAllGenresWithNumberOfSongsAlbumAndArtists: async (): Promise<any[]> => {
+    try {
+      return await SongModel.aggregate([
+        {
+          $group: {
+            _id: "$genre",
+            songs: { $sum: 1 },
+            albums: { $addToSet: "$album" },
+            artists: { $addToSet: "$artist" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            genre: "$_id",
+            songs: 1,
+            numberOfAlbums: { $size: "$albums" },
+            numberOfArtists: { $size: "$artists" },
+          },
+        },
+      ]);
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
+  },
 };
 
 export default songService;

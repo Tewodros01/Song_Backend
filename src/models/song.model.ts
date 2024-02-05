@@ -14,7 +14,7 @@ const songSchema: Schema = new Schema(
   {
     title: { type: String, required: true },
     artist: { type: String, required: true },
-    album: { type: String, required: false }, // Making album optional
+    album: { type: String, required: false },
     genre: { type: String, required: true },
   },
   {

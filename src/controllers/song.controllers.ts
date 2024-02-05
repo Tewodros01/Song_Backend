@@ -207,6 +207,20 @@ const songController = {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+
+  getAllGenresWithArtistAlbumsAndSongs: async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    try {
+      const artists =
+        await songService.getAllGenresWithNumberOfSongsAlbumAndArtists();
+      res.status(200).json(artists);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
 };
 
 export default songController;
