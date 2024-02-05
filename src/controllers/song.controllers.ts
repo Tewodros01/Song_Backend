@@ -51,7 +51,7 @@ const songController = {
   updateSong: async (req: Request, res: Response): Promise<void> => {
     try {
       const songId: string = req.params.id;
-      console.log(`dong Ids ${songId}`);
+
       const { title, artist, album, genre } = req.body;
       const songData: ISong = {
         title: title,
