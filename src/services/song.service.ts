@@ -63,6 +63,7 @@ const songService = {
       throw new Error(`${error}`);
     }
   },
+
   deleteSong: async (id: string): Promise<ISongDocument | null> => {
     try {
       const song = await SongModel.findByIdAndDelete(id);
@@ -135,12 +136,14 @@ const songService = {
   getStatistics: async (): Promise<any> => {
     try {
       const totalSongs: number = await SongModel.countDocuments();
-      const totalAlbums: number =
-        await SongModel.distinct("album").countDocuments();
-      const totalArtists: number =
-        await SongModel.distinct("artist").countDocuments();
-      const totalGenres: number =
-        await SongModel.distinct("genre").countDocuments();
+      const distinctAlbums: string[] = await SongModel.distinct("album");
+      const totalAlbums: number = distinctAlbums.length;
+
+      const distinctArtists: string[] = await SongModel.distinct("artist");
+      const totalArtists: number = distinctArtists.length;
+
+      const distinctGenres: string[] = await SongModel.distinct("genre");
+      const totalGenres: number = distinctGenres.length;
 
       return {
         totalSongs,
