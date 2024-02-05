@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { ISong, ISongDocument, SongModel } from "../models/song.model";
 
 const songService = {
@@ -62,9 +63,10 @@ const songService = {
       throw new Error(`${error}`);
     }
   },
-  deleteSong: async (id: string): Promise<void> => {
+  deleteSong: async (id: string): Promise<ISongDocument | null> => {
     try {
-      await SongModel.findByIdAndDelete(id);
+      const song = await SongModel.findByIdAndDelete(id);
+      return song;
     } catch (error) {
       throw new Error(`${error}`);
     }

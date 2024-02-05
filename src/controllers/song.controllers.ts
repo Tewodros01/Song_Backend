@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import songService from "../services/song.service";
 import { ISong } from "../models/song.model";
+import { ObjectId } from "mongoose";
 
 const songController = {
   createNewSong: async (req: Request, res: Response): Promise<void> => {
@@ -106,12 +107,20 @@ const songController = {
 
   deleteSong: async (req: Request, res: Response): Promise<void> => {
     try {
-      const songId: string = req.params.id;
-      songService.deleteSong(songId);
-      res.status(204).send();
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      const songId = req.params.id;
+      console.log(songId);
+      if (!songId) {
+        res.status(404).json({ error: "Id is Requerd !" });
+      }
+      const song = await songService.deleteSong(songId);
+
+      if (song) {
+        res.status(204).json({ message: "Deleted" });
+      } else {
+        res.status(404).json({ error: "Song not found!" });
+      }
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
     }
   },
 
