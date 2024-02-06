@@ -16,7 +16,7 @@ COPY . .
 # Compile TypeScript code to JavaScript
 RUN yarn build
 
-# Expose the port your app runs on
+# Expose the port  app runs on
 EXPOSE 3000
 
 # Run the application
