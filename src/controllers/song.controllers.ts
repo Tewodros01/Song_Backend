@@ -40,7 +40,7 @@ const songController = {
         res.status(404).json({ error: "Song not found" });
         return;
       }
-      res.status(200).json(song);
+      res.status(200).json({ song });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -64,7 +64,7 @@ const songController = {
         res.status(404).json({ error: "Song not found" });
         return;
       }
-      res.status(200).json(updatedSong);
+      res.status(200).json({ updatedSong });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
