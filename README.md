@@ -17,7 +17,7 @@ The backend of the Song CRUD App is built using Node.js and Express.js framework
 
 To set up the backend of the Song CRUD App locally, follow these steps:
 
-1. Clone the repository from GitHub: `git clone https://github.com/your/repository.git`
+1. Clone the repository from GitHub: `git clone https://github.com/Tewodros01/Song_Backend.git`
 
 2. Navigate to the backend directory: `cd song_backend`
 
