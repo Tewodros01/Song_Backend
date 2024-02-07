@@ -73,61 +73,55 @@ const songService = {
     }
   },
 
-  getNumberOfSongsByGenre: async (): Promise<Map<string, number>> => {
+  getNumberOfSongsByGenre: async (genre: string): Promise<number> => {
     try {
-      const songs: ISongDocument[] = await SongModel.find({});
-      const genreCountMap: Map<string, number> = new Map();
-      songs.forEach((song) => {
-        const genre = song.genre;
-        if (genreCountMap.has(genre)) {
-          genreCountMap.set(genre, genreCountMap.get(genre)! + 1);
-        } else {
-          genreCountMap.set(genre, 1);
-        }
-      });
-      return genreCountMap;
+      const numberOfSongs: number = await SongModel.countDocuments({ genre });
+      return numberOfSongs;
     } catch (error) {
       throw new Error(`${error}`);
     }
   },
 
-  getNumberOfSongsByAlbum: async (): Promise<Map<string, number>> => {
+  getNumberOfSongsByAlbum: async (album: string): Promise<number> => {
     try {
-      const songs: ISongDocument[] = await SongModel.find({});
-      const albumCountMap: Map<string, number> = new Map();
-      songs.forEach((song) => {
-        const album = song.album;
-        if (albumCountMap.has(album)) {
-          albumCountMap.set(album, albumCountMap.get(album)! + 1);
-        } else {
-          albumCountMap.set(album, 1);
-        }
-      });
-      return albumCountMap;
+      const numberOfSongs: number = await SongModel.countDocuments({ album });
+      return numberOfSongs;
     } catch (error) {
       throw new Error(`${error}`);
     }
   },
 
-  getNumberOfSongsAndAlbumsByArtist: async (): Promise<
-    Map<string, { songs: number; albums: string[] }>
-  > => {
+  getNumberOfSongsAndAlbumsByArtist: async (
+    artist: string
+  ): Promise<{ songs: number; albums: number }> => {
     try {
-      const songs: ISongDocument[] = await SongModel.find({});
-      const artistStatsMap: Map<string, { songs: number; albums: string[] }> =
-        new Map();
-      songs.forEach((song) => {
-        const artist = song.artist;
-        if (artistStatsMap.has(artist)) {
-          artistStatsMap.get(artist)!.songs++;
-          if (!artistStatsMap.get(artist)!.albums.includes(song.album)) {
-            artistStatsMap.get(artist)!.albums.push(song.album);
-          }
-        } else {
-          artistStatsMap.set(artist, { songs: 1, albums: [song.album] });
-        }
-      });
-      return artistStatsMap;
+      const artistData = await SongModel.aggregate([
+        {
+          $match: { artist },
+        },
+        {
+          $group: {
+            _id: "$album",
+            songs: { $sum: 1 },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            albums: { $sum: 1 },
+            songs: { $sum: "$songs" },
+          },
+        },
+      ]);
+
+      if (artistData.length === 0) {
+        return { songs: 0, albums: 0 };
+      }
+
+      return {
+        songs: artistData[0].songs,
+        albums: artistData[0].albums,
+      };
     } catch (error) {
       throw new Error(`${error}`);
     }

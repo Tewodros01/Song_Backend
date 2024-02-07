@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import songService from "../services/song.service";
 import { ISong } from "../models/song.model";
-import { ObjectId } from "mongoose";
 
 const songController = {
   createNewSong: async (req: Request, res: Response): Promise<void> => {
@@ -16,7 +15,7 @@ const songController = {
 
       const newSong = songService.createNewSong(songData);
 
-      res.status(201).json(newSong);
+      res.status(201).json({ newSong });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -129,8 +128,9 @@ const songController = {
     res: Response
   ): Promise<void> => {
     try {
-      const genreCountMap = await songService.getNumberOfSongsByGenre();
-      res.status(200).json(Array.from(genreCountMap.entries()));
+      const genre: string = req.params.genre;
+      const numberOfSongs = await songService.getNumberOfSongsByGenre(genre);
+      res.status(200).json({ numberOfSongs });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -142,8 +142,9 @@ const songController = {
     res: Response
   ): Promise<void> => {
     try {
-      const albumCountMap = await songService.getNumberOfSongsByAlbum();
-      res.status(200).json(Array.from(albumCountMap.entries()));
+      const album: string = req.params.album;
+      const numberOfSongs = await songService.getNumberOfSongsByAlbum(album);
+      res.status(200).json({ numberOfSongs });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -155,21 +156,16 @@ const songController = {
     res: Response
   ): Promise<void> => {
     try {
-      const artistStatsMap =
-        await songService.getNumberOfSongsAndAlbumsByArtist();
-      const artistStatsArray = Array.from(artistStatsMap.entries()).map(
-        ([artist, { songs, albums }]) => ({
-          artist,
-          songs,
-          albums: albums.length,
-        })
-      );
-      res.status(200).json(artistStatsArray);
+      const artist: string = req.params.artist;
+      const { songs, albums } =
+        await songService.getNumberOfSongsAndAlbumsByArtist(artist);
+      res.status(200).json({ songs, albums });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+
   getStatistics: async (req: Request, res: Response): Promise<void> => {
     try {
       const statistics = await songService.getStatistics();
