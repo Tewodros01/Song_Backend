@@ -13,9 +13,11 @@ const songController = {
         genre: genre,
       };
 
-      const newSong = songService.createNewSong(songData);
+      // Await the result of createNewSong
+      const newSong = await songService.createNewSong(songData);
 
-      res.status(201).json({ newSong });
+      // Now, newSong contains the newly created song document
+      res.status(201).json(newSong);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -40,7 +42,7 @@ const songController = {
         res.status(404).json({ error: "Song not found" });
         return;
       }
-      res.status(200).json({ song });
+      res.status(200).json(song);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -64,7 +66,7 @@ const songController = {
         res.status(404).json({ error: "Song not found" });
         return;
       }
-      res.status(200).json({ updatedSong });
+      res.status(200).json(updatedSong);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
