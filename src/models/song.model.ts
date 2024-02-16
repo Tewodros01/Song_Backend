@@ -6,6 +6,7 @@ interface ISong {
   album: string;
   genre: string;
 }
+
 interface ISongDocument extends Document, ISong {
   id: string;
 }
@@ -15,7 +16,7 @@ const songSchema: Schema = new Schema(
     title: { type: String, required: true },
     artist: { type: String, required: true },
     album: { type: String, required: false },
-    genre: { type: enum: { "A"| "B"}, required: true },
+    genre: { type: String, required: true },
   },
   {
     toJSON: {
